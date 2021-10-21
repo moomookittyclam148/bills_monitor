@@ -1,4 +1,4 @@
-from bills_monitor import bill_monitor
+from bill_monitor import bill_monitor
 
 def main():
     try:

@@ -10,7 +10,7 @@ class bill_monitor:
         self.chromedriver = webdriver.Chrome(path_to_chromedriver)
         self.file = file
 
-    def read_file(file):
+    def read_file(self, file):
         print('TODO')
 
     def get_tmobile_bill(self):
