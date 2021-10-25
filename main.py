@@ -4,7 +4,7 @@ def main():
     try:
         bm = bill_monitor()
         bm.read_json('user_info.json')
-        # bm.get_tmobile_bill()
+        bm.get_tmobile_bill()
     finally:
         bm.close_driver()
 
