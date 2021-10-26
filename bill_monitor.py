@@ -13,10 +13,18 @@ class bill_monitor:
         self.chromedriver = webdriver.Chrome(path_to_chromedriver)
         self.bill_dict = {}
 
+    # Utility methods
     def read_json(self, file):
         with open(os.path.join(script_dir, file)) as open_file:
             self.user_auth_file = json.load(open_file)
 
+    def display_bill_data():
+        print('TODO')
+
+    def close_driver(self):
+        self.chromedriver.close()
+
+    # Getting Bill data such as due date and amount due
     def get_tmobile_bill(self):
         if self.user_auth_file == None:
             print('Load user auth json first')
@@ -37,6 +45,3 @@ class bill_monitor:
             bill_amount = self.chromedriver.find_element_by_xpath("//div[contains(text(), '$')]").text
             bill_amount = float(bill_amount.replace('$', ''))
             self.bill_dict.update({"tmobile" : {"due_date" : due_date, "bill_amount" : bill_amount}})
-
-    def close_driver(self):
-        self.chromedriver.close()
