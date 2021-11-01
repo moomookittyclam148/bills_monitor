@@ -1,6 +1,7 @@
 import os
 import json
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -9,8 +10,8 @@ script_dir = os.path.dirname(__file__)
 path_to_chromedriver = os.path.join(script_dir, "../chromedriver")
 
 class bill_monitor:
-    def __init__(self):
-        self.chromedriver = webdriver.Chrome(path_to_chromedriver)
+    def __init__(self, options={}):
+        self.chromedriver = webdriver.Chrome(path_to_chromedriver, options=options)
         self.bill_dict = {}
 
     # Utility methods
@@ -18,8 +19,13 @@ class bill_monitor:
         with open(os.path.join(script_dir, file)) as open_file:
             self.user_auth_file = json.load(open_file)
 
-    def display_bill_data():
-        print('TODO')
+    def display_bill_data(self):
+        for dict in self.bill_dict:
+            print('----------------------------')
+            print(f"Current Ammount due: {str(self.bill_dict[dict]['bill_amount']).ljust(22)}")
+            print(f"Current due due: {str(self.bill_dict[dict]['due_date']).ljust(22)}")
+            print('----------------------------')
+
 
     def close_driver(self):
         self.chromedriver.close()
