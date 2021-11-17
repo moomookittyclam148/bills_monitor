@@ -51,3 +51,14 @@ class bill_monitor:
             bill_amount = self.chromedriver.find_element_by_xpath("//div[contains(text(), '$')]").text
             bill_amount = float(bill_amount.replace('$', ''))
             self.bill_dict.update({"tmobile" : {"due_date" : due_date, "bill_amount" : bill_amount}})
+
+    def get_spectrum_bill(self):
+        if self.user_auth_file == None:
+            print('Load user auth json first')
+        else:
+            self.chromedriver.get('https://www.spectrum.com/')
+            self.chromedriver.find_element_by_id('login-button').click
+            WebDriverWait(self.chromedriver, 10).until(EC.presence_of_element_located((By.ID, "cc-username")))
+            self.chromedriver.find_element_by_id('cc-username').send_keys(self.user_auth_file['user_info']['spectrum_info']['username'])
+            self.chromedriver.find_element_by_id('cc-user-password').send_keys(self.user_auth_file['user_info']['spectrum_info']['password'])
+            self.chromedriver.find_element_by_class_name('dialog_button.kite-btn.ngk-button').click

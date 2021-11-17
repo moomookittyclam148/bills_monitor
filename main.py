@@ -37,8 +37,6 @@ def main():
         else:
             print("Don'/t do alert stuff" )
 
-
-        # bm.read_json('user_info.json')
     finally:
         bm.close_driver()
 
