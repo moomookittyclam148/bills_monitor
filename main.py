@@ -8,6 +8,7 @@ def main():
         argparser.add_argument('-H', '--headless', help='Run the scripts headless in chrome', action='store_true')
         argparser.add_argument('-AU', '--authfile', help='Supply user auth file. If none is given default in directory will be used', default='user_info.json')
         argparser.add_argument('-T', '--tmobile', help='Display T-mobile bill information', action='store_true')
+        argparser.add_argument('-S', '--spectrum', help='Display Spectrum bill information', action='store_true')
         argparser.add_argument('-DA', '--displayall', help='Display all bill information', action='store_true')
         argparser.add_argument('-A', '--alert', help='Enable Alerting from text and email about bills due soon', action='store_true')
         args = argparser.parse_args()
@@ -26,10 +27,9 @@ def main():
 
         if args['tmobile']:
             bm.get_tmobile_bill()
-            bm.display_bill_data()
+        elif args['spectrum']:
+            bm.get_spectrum_bill()
         elif args['displayall']:
-            bm.get_tmobile_bill()
-            # Get rest of the bills
             bm.display_bill_data()
 
         if args['alert']:

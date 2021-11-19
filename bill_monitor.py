@@ -56,9 +56,13 @@ class bill_monitor:
         if self.user_auth_file == None:
             print('Load user auth json first')
         else:
-            self.chromedriver.get('https://www.spectrum.com/')
+            self.chromedriver.get('https://www.spectrum.net/')
             self.chromedriver.find_element_by_id('login-button').click
             WebDriverWait(self.chromedriver, 10).until(EC.presence_of_element_located((By.ID, "cc-username")))
             self.chromedriver.find_element_by_id('cc-username').send_keys(self.user_auth_file['user_info']['spectrum_info']['username'])
             self.chromedriver.find_element_by_id('cc-user-password').send_keys(self.user_auth_file['user_info']['spectrum_info']['password'])
             self.chromedriver.find_element_by_class_name('dialog_button.kite-btn.ngk-button').click
+            due_date = self.chromedriver.find_element_by_class_name('paymentMessage').text
+            bill_amount = self.chromedriver.find_element_by_class_name('kite-h1.balance').text
+            bill_amount = float(bill_amount)
+            self.bill_dict.update({"spectrum" : {"due_date" : due_date, "bill_amount" : bill_amount}})
