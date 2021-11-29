@@ -1,5 +1,6 @@
 import os
 import json
+import time
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -23,8 +24,11 @@ class bill_monitor:
         for dict in self.bill_dict:
             print('----------------------------')
             print(f"Current Ammount due: {str(self.bill_dict[dict]['bill_amount']).ljust(22)}")
-            print(f"Current due due: {str(self.bill_dict[dict]['due_date']).ljust(22)}")
+            print(f"Current due date: {str(self.bill_dict[dict]['due_date']).ljust(22)}")
             print('----------------------------')
+
+    def alert(self):
+        print('TODO')
 
 
     def close_driver(self):
@@ -56,13 +60,18 @@ class bill_monitor:
         if self.user_auth_file == None:
             print('Load user auth json first')
         else:
+            self.chromedriver.implicitly_wait(20)
             self.chromedriver.get('https://www.spectrum.net/')
-            self.chromedriver.find_element_by_id('login-button').click
+            WebDriverWait(self.chromedriver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "kite-btn.ngk-button.kite-typography.kite-btn-primary.kite-btn-lg")))
+            self.chromedriver.find_element_by_xpath('//button[@id="login-button"]').click()
             WebDriverWait(self.chromedriver, 10).until(EC.presence_of_element_located((By.ID, "cc-username")))
             self.chromedriver.find_element_by_id('cc-username').send_keys(self.user_auth_file['user_info']['spectrum_info']['username'])
             self.chromedriver.find_element_by_id('cc-user-password').send_keys(self.user_auth_file['user_info']['spectrum_info']['password'])
-            self.chromedriver.find_element_by_class_name('dialog_button.kite-btn.ngk-button').click
+            self.chromedriver.find_element_by_class_name('dialog_button.kite-btn.ngk-button').click()
+            WebDriverWait(self.chromedriver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'paymentMessage')))
             due_date = self.chromedriver.find_element_by_class_name('paymentMessage').text
+            due_date = due_date.replace('Payment Due by ', '')
             bill_amount = self.chromedriver.find_element_by_class_name('kite-h1.balance').text
             bill_amount = float(bill_amount)
             self.bill_dict.update({"spectrum" : {"due_date" : due_date, "bill_amount" : bill_amount}})
+            print(self.bill_dict)
