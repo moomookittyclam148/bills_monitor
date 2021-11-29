@@ -35,6 +35,11 @@ class bill_monitor:
         self.chromedriver.close()
 
     # Getting Bill data such as due date and amount due
+    def get_all_bill_info(self):
+        get_tmobile_bill()
+        get_spectrum_bill()
+
+
     def get_tmobile_bill(self):
         if self.user_auth_file == None:
             print('Load user auth json first')
@@ -72,6 +77,8 @@ class bill_monitor:
             due_date = self.chromedriver.find_element_by_class_name('paymentMessage').text
             due_date = due_date.replace('Payment Due by ', '')
             bill_amount = self.chromedriver.find_element_by_class_name('kite-h1.balance').text
-            bill_amount = float(bill_amount)
+            if self.user_auth_file['user_info']['spectrum_info']['is_split']:
+                bill_amount = float(bill_amount) / self.user_auth_file['user_info']['spectrum_info']['split']
+            else:
+                bill_amount = float(bill_amount)
             self.bill_dict.update({"spectrum" : {"due_date" : due_date, "bill_amount" : bill_amount}})
-            print(self.bill_dict)

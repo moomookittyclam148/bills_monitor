@@ -10,6 +10,7 @@ def main():
         argparser.add_argument('-T', '--tmobile', help='Display T-mobile bill information', action='store_true')
         argparser.add_argument('-S', '--spectrum', help='Display Spectrum bill information', action='store_true')
         argparser.add_argument('-DA', '--displayall', help='Display all bill information', action='store_true')
+        argparser.add_argument('-p', '--print', help='Display bill info collected', action='store_true')
         argparser.add_argument('-A', '--alert', help='Enable Alerting from text and email about bills due soon', action='store_true')
         args = argparser.parse_args()
         args = vars(args)
@@ -30,12 +31,15 @@ def main():
         elif args['spectrum']:
             bm.get_spectrum_bill()
         elif args['displayall']:
+            bm.get_all_bill_info()
+
+        if args['print']:
             bm.display_bill_data()
 
         if args['alert']:
             print('Do alert stuff')
         else:
-            print("Don'/t do alert stuff" )
+            print("Don't do alert stuff" )
 
     finally:
         bm.close_driver()
