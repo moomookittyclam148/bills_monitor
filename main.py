@@ -19,10 +19,10 @@ def main():
             options = Options()
             options.headless = True
             options.add_argument('window-size=1920,1080')
-            bm = bill_monitor(options)
         else:
             options = Options()
-            bm = bill_monitor(options)
+
+        bm = bill_monitor(options)
 
         bm.read_json(args['authfile'])
 
