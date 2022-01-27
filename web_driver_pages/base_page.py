@@ -8,6 +8,9 @@ class BasePage:
         self.webdriver = webdriver
         self.logger = Logger
 
+    def refresh_page(self):
+        self.webdriver.refresh()
+
     def wait_for_presence_of_elem(self, locator_tuple):
         loc_str = locator_tuple[1]
         self.logger.info(f"Waiting for presence of element '{loc_str}'")
@@ -17,3 +20,9 @@ class BasePage:
         loc_str = locator_tuple[1]
         self.logger.info(f"Waiting for element '{loc_str}' to be clicked")
         return WebDriverWait(self.chromedriver, 10).until(EC.element_to_be_clickable(locator_tuple))
+
+    def fill_in_field(self, locator_tuple, value):
+        loc_str = locator_tuple[1]
+        self.logger.info(f"Filling elem {loc_str} with {value}")
+        WebDriverWait(self.chromedriver, 10).until(EC.element_to_be_clickable(locator_tuple)).clear()
+        WebDriverWait(self.chromedriver, 10).until(EC.element_to_be_clickable(locator_tuple)).send_keys(value)
