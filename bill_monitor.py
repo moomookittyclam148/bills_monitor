@@ -1,6 +1,7 @@
 import os
 import json
 import time
+from logs.logger import Logger
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -14,6 +15,7 @@ class bill_monitor:
     def __init__(self, options={}):
         self.chromedriver = webdriver.Chrome(path_to_chromedriver, options=options)
         self.bill_dict = {}
+        self.logger = Logger()
 
     # Utility methods
     def read_json(self, file):
@@ -41,8 +43,9 @@ class bill_monitor:
 
 
     def get_tmobile_bill(self):
+        self.logger.info('get_tmobile_bill()')
         if self.user_auth_file == None:
-            print('Load user auth json first')
+            self.logger.error('Load user auth json first')
         else:
             self.chromedriver.get('https://www.t-mobile.com/')
             self.chromedriver.find_element_by_id('user-links-dropdown').click()
@@ -62,10 +65,11 @@ class bill_monitor:
             self.bill_dict.update({"tmobile" : {"due_date" : due_date, "bill_amount" : bill_amount}})
 
     def get_spectrum_bill(self):
+        self.logger.info('get_spectrum_bill()')
         if self.user_auth_file == None:
-            print('Load user auth json first')
+            self.logger.error('Load user auth json first')
         else:
-            self.chromedriver.implicitly_wait(20)
+            # self.chromedriver.implicitly_wait(20)
             self.chromedriver.get('https://www.spectrum.net/')
             WebDriverWait(self.chromedriver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "kite-btn.ngk-button.kite-typography.kite-btn-primary.kite-btn-lg")))
             self.chromedriver.find_element_by_xpath('//button[@id="login-button"]').click()
