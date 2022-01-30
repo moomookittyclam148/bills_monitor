@@ -4,9 +4,7 @@ import time
 from logs.logger import Logger
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+from web_driver_pages.spectrum_website import spectrum_website
 
 script_dir = os.path.dirname(__file__)
 path_to_chromedriver = os.path.join(script_dir, "../chromedriver")
@@ -69,20 +67,8 @@ class bill_monitor:
         if self.user_auth_file == None:
             self.logger.error('Load user auth json first')
         else:
-            # self.chromedriver.implicitly_wait(20)
-            self.chromedriver.get('https://www.spectrum.net/')
-            WebDriverWait(self.chromedriver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "kite-btn.ngk-button.kite-typography.kite-btn-primary.kite-btn-lg")))
-            self.chromedriver.find_element_by_xpath('//button[@id="login-button"]').click()
-            WebDriverWait(self.chromedriver, 10).until(EC.presence_of_element_located((By.ID, "cc-username")))
-            self.chromedriver.find_element_by_id('cc-username').send_keys(self.user_auth_file['user_info']['spectrum_info']['username'])
-            self.chromedriver.find_element_by_id('cc-user-password').send_keys(self.user_auth_file['user_info']['spectrum_info']['password'])
-            self.chromedriver.find_element_by_class_name('dialog_button.kite-btn.ngk-button').click()
-            WebDriverWait(self.chromedriver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'paymentMessage')))
-            due_date = self.chromedriver.find_element_by_class_name('paymentMessage').text
-            due_date = due_date.replace('Payment Due by ', '')
-            bill_amount = self.chromedriver.find_element_by_class_name('kite-h1.balance').text
-            if self.user_auth_file['user_info']['spectrum_info']['is_split']:
-                bill_amount = float(bill_amount) / self.user_auth_file['user_info']['spectrum_info']['split']
-            else:
-                bill_amount = float(bill_amount)
-            self.bill_dict.update({"spectrum" : {"due_date" : due_date, "bill_amount" : bill_amount}})
+            spectrum_driver = spectrum_website(self.chromedriver)
+            spectrum_driver.login(
+                (self.user_auth_file['user_info']['spectrum_info']['username'],
+                self.user_auth_file['user_info']['spectrum_info']['password']))
+            self.bill_dict.update({"spectrum" : spectrum_driver.get_bill_data()})
