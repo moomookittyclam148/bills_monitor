@@ -13,7 +13,6 @@ class spectrum_website(BasePage):
         self.PASSWORD_FIELD = (By.ID, 'cc-user-password')
         self.SIGN_IN_BUTTON = (By.XPATH, '//button[contains(text(),"Sign In")]')
         self.PAYMENT_MESSAGE = (By.CLASS_NAME, 'paymentMessage')
-        # self.BALANCE_AMOUNT = (By.XPATH, '//span[@class*="balance"]')
         self.BALANCE_AMOUNT = (By.CSS_SELECTOR, 'span[class="kite-h1 balance"]')
 
         self.get_spectrum_page()
