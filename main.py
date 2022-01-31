@@ -19,6 +19,7 @@ def main():
             options = Options()
             options.headless = True
             options.add_argument('window-size=1920,1080')
+            options.add_argument('user-agent="MQQBrowser/26 Mozilla/5.0 (Linux; U; Android 2.3.7; zh-cn; MB200 Build/GRJ22; CyanogenMod-7) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"')
         else:
             options = Options()
 
