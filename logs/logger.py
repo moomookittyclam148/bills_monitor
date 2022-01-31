@@ -14,5 +14,5 @@ class Logger:
         print(f"{logger_info_start} {log_message}")
 
     def error(self, log_message):
-        logger_error_start = f"{self.log_start} INFO:"
+        logger_error_start = f"{self.log_start} ERROR:"
         print(f"{logger_error_start} {log_message}")
